@@ -31,43 +31,60 @@
         var mymap;
         initializeMap();
         getandDrawSatellite();
+        getandDrawSolar();
+
 
 
         async function getandDrawSatellite() {
             let isslocation = await getISSLocation();
             drawSatellite(isslocation);
+            let solarlocation = await getsolarLocation();
+            drawSolar(solarlocation);
+
         }
         function drawSatellite(location) {
             const { latitude, longitude } = location;
             let marker = L.marker([latitude, longitude]).addTo(mymap);
         }
+        function drawSolar(solarlocation) {
+            const { solar_lat, solar_lon } = solarlocation;
+            let marker = L.marker([solar_lat, solar_lon]).addTo(mymap);
 
-        async function getISSLocation() {
-            let url = "https://api.wheretheiss.at/v1/satellites/25544";
-            let response = await fetch(url);
-            let location = await response.json();
-            //destructuring
-            const { latitude, longitude } = location;
-            //echo them to the screen
-            document.getElementById("latitude").textContent = "Latitude: " + latitude;
-            document.getElementById("longitude").textContent = "Longitude: " + longitude;
+            async function getISSLocation() {
+                let url = "https://api.wheretheiss.at/v1/satellites/25544";
+                let response = await fetch(url);
+                let location = await response.json();
+                //destructuring
+                const { latitude, longitude } = location;
+                //echo them to the screen
+                document.getElementById("latitude").textContent = "Latitude: " + latitude;
+                document.getElementById("longitude").textContent = "Longitude: " + longitude;
+            }
+
+            async function getsolarLocation() {
+                let url = "https://api.wheretheiss.at/v1/satellites/25544";
+                let response = await fetch(url);
+                let solarlocation = await response.json();
+                //destructuring
+                const { solar_lat, solar_lon } = solarlocation;
 
 
-            //return the whole object
-            return location;
-        }
-        function initializeMap() {
-            mymap = L.map('mapid').setView([52.40, -1.22], 3);
-            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                maxZoom: 18,
-                id: 'mapbox/streets-v11',
-                tileSize: 512,
-                zoomOffset: -1,
-                accessToken: 'pk.eyJ1IjoicGh5dG9taWNoYWVsIiwiYSI6ImNrY3g0bjc0YTBrY2Yyc3JwcjFuZjJxbXQifQ.NhfguJayKvgdgAbqv5IP1A'
-            }).addTo(mymap);
-            var arnie = L.terminator().addTo(mymap);
-        }
+                //return the whole object
+                return location;
+                return solarlacation;
+            }
+            function initializeMap() {
+                mymap = L.map('mapid').setView([52.40, -1.22], 3);
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'pk.eyJ1IjoicGh5dG9taWNoYWVsIiwiYSI6ImNrY3g0bjc0YTBrY2Yyc3JwcjFuZjJxbXQifQ.NhfguJayKvgdgAbqv5IP1A'
+                }).addTo(mymap);
+                var arnie = L.terminator().addTo(mymap);
+            }
 
     </script>
 </body>
