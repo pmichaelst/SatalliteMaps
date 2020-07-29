@@ -20,19 +20,26 @@
 </head>
 
 <body>
-    <h1>Home</h1>
+    <h1>Satellite Location</h1>
+    <span id="latitude">Latitude:</span>
+    <br>
+    <span id="longitude">Longitude:</span>
+    <hr>
     <div id="mapid"></div>
 
     <script>
         initializeMap();
-        function getISSLocation() {
+        async function getISSLocation() {
             let url = "https://api.wheretheiss.at/v1/satellites/25544";
-            let response = fetch(url);
-            let location = response.json();
+            let response = await fetch(url);
+            let location = await response.json();
             //destructuring
-            const { latitude,longitude } = location;
+            const { latitude, longitude } = location;
             //echo them to the screen
-            return location; 
+
+
+            //return the whole object
+            return location;
         }
         function initializeMap() {
             var mymap = L.map('mapid').setView([52.40, -1.22], 1);
