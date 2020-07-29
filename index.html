@@ -28,7 +28,20 @@
     <div id="mapid"></div>
 
     <script>
+        var mymap;
         initializeMap();
+        getandDrawSatellite();
+
+
+        async function getandDrawSatellite() {
+            let isslocation = await getISSLocation();
+            drawSatellite(isslocation);
+        }
+        function drawSatellite(location) {
+            const { latitude, longitude } = location;
+            let marker = L.marker([latitude, longitude]).addTo(mymap);
+        }
+
         async function getISSLocation() {
             let url = "https://api.wheretheiss.at/v1/satellites/25544";
             let response = await fetch(url);
@@ -36,13 +49,15 @@
             //destructuring
             const { latitude, longitude } = location;
             //echo them to the screen
+            document.getElementById("latitude").textContent = "Latitude: " + latitude;
+            document.getElementById("longitude").textContent = "Longitude: " + longitude;
 
 
             //return the whole object
             return location;
         }
         function initializeMap() {
-            var mymap = L.map('mapid').setView([52.40, -1.22], 1);
+            mymap = L.map('mapid').setView([52.40, -1.22], 1);
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 maxZoom: 18,
